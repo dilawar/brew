@@ -6,13 +6,15 @@ class Smoldyn < Formula
 
   depends_on "cmake" => :build
   depends_on "boost" => :build
-  depends_on "freeglut"
-  depends_on "python@3"
+  depends_on "pybind11" => :build
+  depends_on "freeglut" => :build
+  depends_on "python@3" 
 
   def install
-    # ENV.deparallelize  # if your formula fails when building in parallel
+    args = std_cmake_args
+    args << "-DPYTHON_EXECUTABLE=$(which python3)"
     mkdir "_build" do 
-      system "cmake", ".", *std_cmake_args
+      system "cmake", "..", *args
       system "make", "install" # if this fails, try separate make/make install steps
     end
   end
